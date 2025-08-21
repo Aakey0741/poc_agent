@@ -1,0 +1,12 @@
+{
+  "products": [
+    { "id": 1, "name": "PLA Pro Filament", "category": "filament", "price": 1299 },
+    { "id": 2, "name": "0.4mm Brass Nozzle", "category": "spare", "price": 199 },
+    { "id": 3, "name": "Bed Sheet Kobra 2 Neo", "category": "accessory", "price": 899 },
+    { "id": 4, "name": "PETG Transparent", "category": "filament", "price": 1499 }
+  ],
+  "users": [
+    { "id": 101, "name": "Aakey", "tier": "pro" },
+    { "id": 102, "name": "Guest", "tier": "free" }
+  ]
+}
