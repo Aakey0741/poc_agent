@@ -3,7 +3,7 @@ import './styles.css'
 import { streamChat } from './api'
 
 function Message({ role, content }) {
-  return <div className={"msg " + (role === 'user' ? 'user' : 'bot')}>{content}</div>
+  return <div className={"msg " + (role === 'user' ? 'user' : 'bot')} dangerouslySetInnerHTML={{ __html: content }}></div>
 }
 
 export default function App() {
@@ -24,10 +24,10 @@ filament under 1400"` }
   const send = () => {
     if (!input.trim() || loading) return
     const userMsg = { role: 'user', content: input }
-    setMessages(m => [...m, userMsg, { role: 'bot', content: '' }])
+    setMessages(m => [...m, userMsg])
     setInput('')
     setLoading(true)
-    const abort = streamChat({ message: userMsg.content, user_id: 101 },
+    const abort = streamChat({ message: userMsg.content, thread_id: 101 },
       (token) => {
         setMessages(m => {
           const copy = [...m]
@@ -37,10 +37,12 @@ filament under 1400"` }
         })
       },
       () => setLoading(false),
-      () => setLoading(false)
+      () => setLoading(false),
+      setMessages
     )
     return abort
   }
+  // console.log({messages})
   return (
     <div className="container">
       <h2>Broco × Aakey — AI Agent</h2>

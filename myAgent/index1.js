@@ -2,15 +2,14 @@ const dotenv = require("dotenv")
 const express = require("express")
 const { MongoClient } = require("mongodb")
 const { callAiAgent } = require("./agent_tool")
-const cors = require("cors")
-dotenv.config();
 
 const app = express()
 app.use(express.json())
-app.use(cors())
+
+dotenv.config();
 
 const MONGODB_URI = process.env.MONGODB_ATLAS_URI;
-// const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
 const client = new MongoClient(MONGODB_URI);
 
@@ -24,6 +23,7 @@ const startServer = async () => {
 
         app.get('/', async (req, res) => {
             console.log("Base route hitted..")
+            await callAiAgent();
             res.send('LangGraph Agent Server')
         })
 
@@ -39,17 +39,17 @@ const startServer = async () => {
             }
         })
 
-        // app.post('/chat/:threadId', async (req, res) => {
-        //     const { threadId } = req.params
-        //     const msg = req.body.message
-        //     try {
-        //         const response = await callAiAgent(client, msg, threadId);
-        //         res.json({ response });
-        //     } catch (error) {
-        //         console.error('Error in chat:', error);
-        //         res.status(500).json({ error: 'Internal server error' });
-        //     }    
-        // })
+        app.post('/chat/:threadId', async (req, res) => {
+            const { threadId } = req.params
+            const msg = req.body.message
+            try {
+                const response = await callAiAgent(client, msg, threadId);
+                res.json({ response });
+            } catch (error) {
+                console.error('Error in chat:', error);
+                res.status(500).json({ error: 'Internal server error' });
+            }
+        })
 
         const PORT = process.env.PORT || 3000;
         app.listen(PORT, () => {
